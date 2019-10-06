@@ -6,17 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-public class JanguleServiceApplication {
+public class JangulServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(JanguleServiceApplication.class, args);
+        SpringApplication.run(JangulServiceApplication.class, args);
     }
 }
-
-@RestController
-class HiController {
-    @GetMapping("/")
-    public String hello() {
-        return "Hello Softwaretalks";
-    }
-}
-

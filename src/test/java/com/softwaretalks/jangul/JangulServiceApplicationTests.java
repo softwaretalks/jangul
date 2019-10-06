@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class JanguleServiceApplicationTests {
+public class JangulServiceApplicationTests {
     @Test
     public void contextLoads() {
     }
