@@ -11,12 +11,3 @@ public class JanguleServiceApplication {
         SpringApplication.run(JanguleServiceApplication.class, args);
     }
 }
-
-@RestController
-class HiController {
-    @GetMapping("/")
-    public String hello() {
-        return "Hello Softwaretalks";
-    }
-}
-
