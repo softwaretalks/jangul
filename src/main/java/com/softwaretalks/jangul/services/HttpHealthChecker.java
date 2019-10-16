@@ -4,20 +4,19 @@ import com.softwaretalks.jangul.models.Endpoint;
 import com.softwaretalks.jangul.models.EndpointProtocol;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
 public class HttpHealthChecker implements HealthChecker {
     private final RestTemplate restTemplate;
-    private final HealthcheckResult successfulResult = new HealthcheckResult(true);
-    private final HealthcheckResult failedResult = new HealthcheckResult(false);
 
     public HttpHealthChecker(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     @Override
-    public HealthcheckResult healthcheck(Endpoint endpoint) {
+    public HealthcheckResult healthcheck(Endpoint endpoint) throws UnsuccessfulCheckException {
         if (endpoint.getProtocol() != getSupportedProtocol()) {
             throw new IllegalArgumentException(
                     String.format("Unsupported protocol %s", endpoint.getProtocol())
@@ -26,12 +25,14 @@ public class HttpHealthChecker implements HealthChecker {
         try {
             final var returnedEntity = this.restTemplate.getForEntity(endpoint.getAddress(), String.class);
             if (returnedEntity.getStatusCode().is2xxSuccessful()) {
-                return successfulResult;
+                return new HealthcheckResult(endpoint, true);
             }
-            return failedResult;
+            return new HealthcheckResult(endpoint, false);
 
-        } catch (HttpClientErrorException ex) {
-            return failedResult;
+        } catch (HttpClientErrorException | HttpServerErrorException ex) {
+            return new HealthcheckResult(endpoint, false);
+        } catch (Exception e) {
+            throw new UnsuccessfulCheckException(e);
         }
     }
 
