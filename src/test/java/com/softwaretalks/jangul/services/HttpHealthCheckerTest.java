@@ -1,57 +1,39 @@
 package com.softwaretalks.jangul.services;
 
 import com.softwaretalks.jangul.models.Endpoint;
-import com.softwaretalks.jangul.models.EndpointProtocol;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
-@ExtendWith(MockitoExtension.class)
-class HttpHealthCheckerTest {
-    @Mock
-    private RestTemplate restTemplate;
+@SpringBootTest
+public class HttpHealthCheckerTest {
+    @Autowired
+    private HttpHealthChecker healthChecker;
 
     @Test
-    public void healthcheck_shouldThrowExceptionOnInvalidEndpoints() {
-        HttpHealthChecker healthChecker = new HttpHealthChecker(restTemplate);
-        final var tcpEndpoint = new Endpoint("address", EndpointProtocol.TCP);
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                healthChecker.healthcheck(tcpEndpoint));
+    public void check_shouldReturnDownOn404Responses() throws UnsuccessfulCheckException {
+        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/404"));
+        assertThat(healthcheck.isUp()).isFalse();
     }
 
     @Test
-    public void healthCheck_shouldReturnDownIfEndpointReturnNon2xxResponse() {
-        HttpHealthChecker healthChecker = new HttpHealthChecker(restTemplate);
-        final var httpEndpoint = new Endpoint("x", EndpointProtocol.HTTP);
-
-        when(restTemplate.getForEntity(httpEndpoint.getAddress(), String.class))
-                .thenReturn(new ResponseEntity<>(HttpStatus.BAD_GATEWAY));
-
-        final var healthcheckResult = healthChecker.healthcheck(httpEndpoint);
-
-        assertThat(healthcheckResult.isUp()).isFalse();
+    public void check_shouldReturnDownOn502Responses() throws UnsuccessfulCheckException {
+        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/502"));
+        assertThat(healthcheck.isUp()).isFalse();
     }
 
     @Test
-    public void healthcheck_shouldReturnUpIfEndpointReturn2xxResponse() {
-        HttpHealthChecker healthChecker = new HttpHealthChecker(restTemplate);
-        final var httpEndpoint = new Endpoint("x", EndpointProtocol.HTTP);
-
-        when(restTemplate.getForEntity(httpEndpoint.getAddress(), String.class))
-                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
-
-        final var healthcheckResult = healthChecker.healthcheck(httpEndpoint);
-
-        assertThat(healthcheckResult.isUp()).isTrue();
+    public void check_shouldReturnUpOnResponse200() throws UnsuccessfulCheckException {
+        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/200"));
+        assertThat(healthcheck.isUp()).isTrue();
     }
 
+    @Test
+    public void check_shouldThrowExceptionOnInvalidEndpoints() {
+        assertThrows(UnsuccessfulCheckException.class, () ->
+                healthChecker.healthcheck(Endpoint.httpFrom("https://this-site-cant-exist.blabla")));
+    }
 }
