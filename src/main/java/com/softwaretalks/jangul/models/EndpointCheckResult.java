@@ -29,5 +29,4 @@ public class EndpointCheckResult {
         this.up = result.isUp();
         this.date = new Date();
     }
-
 }

@@ -1,5 +1,6 @@
 package com.softwaretalks.jangul.services;
 
+import com.softwaretalks.jangul.models.Endpoint;
 import com.softwaretalks.jangul.models.EndpointCheckResult;
 import com.softwaretalks.jangul.models.EndpointProtocol;
 import com.softwaretalks.jangul.repositories.EndpointCheckResultRepository;
@@ -19,17 +20,20 @@ public class DefaultJangulService implements JangulService {
     private final EndpointRepository endpointRepository;
     private final Map<EndpointProtocol, HealthChecker> healthCheckers;
     private final EndpointCheckResultRepository endpointCheckResultRepository;
+    private final HealthCheckResultProcessor processor;
 
     public DefaultJangulService(
             EndpointRepository endpointRepository,
             List<HealthChecker> healthCheckers,
-            EndpointCheckResultRepository endpointCheckResultRepository
+            EndpointCheckResultRepository endpointCheckResultRepository,
+            HealthCheckResultProcessor processor
     ) {
         this.endpointRepository = endpointRepository;
         this.healthCheckers = healthCheckers.stream().collect(
                 Collectors.toMap(HealthChecker::getSupportedProtocol, Function.identity())
         );
         this.endpointCheckResultRepository = endpointCheckResultRepository;
+        this.processor = processor;
     }
 
     @Override
@@ -37,17 +41,23 @@ public class DefaultJangulService implements JangulService {
     public void runHealthchecks() {
         log.info("runHealthchecks");
         endpointRepository.findAll().stream()
-                .forEach(endpoint -> {
-                            final var checker = this.healthCheckers.get(endpoint.getProtocol());
-                            if (checker == null) {
-                                log.warn("Endpoint protocol {} is not supported! ", endpoint.getProtocol());
-                            }
+                .forEach(this::processEndpoint);
+    }
 
-                            final var healthcheckResult = checker.healthcheck(endpoint);
-                            final EndpointCheckResult endpointCheckResult = new EndpointCheckResult(endpoint, healthcheckResult);
+    private void processEndpoint(Endpoint endpoint) {
+        final var checker = this.healthCheckers.get(endpoint.getProtocol());
+        if (checker == null) {
+            log.warn("Endpoint protocol {} is not supported! ", endpoint.getProtocol());
+        }
 
-                            endpointCheckResultRepository.save(endpointCheckResult);
-                        }
-                );
+        final HealthcheckResult healthcheckResult;
+        try {
+            healthcheckResult = checker.healthcheck(endpoint);
+            final EndpointCheckResult endpointCheckResult = new EndpointCheckResult(endpoint, healthcheckResult);
+            endpointCheckResultRepository.save(endpointCheckResult);
+            processor.process(healthcheckResult);
+        } catch (UnsuccessfulCheckException e) {
+            log.warn(String.format("Error in healthchecking endpoint {}", endpoint.getAddress()), e);
+        }
     }
 }
