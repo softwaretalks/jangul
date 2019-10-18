@@ -14,13 +14,12 @@ public class LogController {
 
     private final LogRepository logRepository;
 
-    public LogController(LogRepository logRepository){
-
+    public LogController(LogRepository logRepository) {
         this.logRepository = logRepository;
     }
 
     @GetMapping("/endpoints/{endpoint-id}/logs")
     public List<Log> getLogs(@PathVariable("endpoint-id") UUID endpointId) {
-        return null;
+        return logRepository.findByEndpointIdOrderByStartTimeDesc(endpointId);
     }
 }
