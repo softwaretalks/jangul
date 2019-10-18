@@ -1,0 +1,64 @@
+swagger: "2.0"
+info:
+  description: "Jangul API Contract"
+  version: "1.0.0"
+  title: "Jangul"
+  contact:
+    email: "soroosh.sarabadani@gmail.com"
+
+host: "jangul.io"
+basePath: "/"
+schemes:
+  - "https"
+
+paths:
+  /endpoints:
+    post:
+      summary: "Add a new endpoint to check its health in known intervals"
+      description: ""
+      operationId: "addEndpoint"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Endpoints object"
+          required: true
+          schema:
+            $ref: "#/definitions/Endpoint"
+      responses:
+        200:
+          description: "Endpoint added successfully"
+        405:
+          description: "Invalid input"
+
+
+    get:
+      summary: "All the registered endpoints"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Endpoint"
+
+
+
+definitions:
+  Endpoint:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      address:
+        type: "string"
+      protocol:
+        type: "string"
+        enum:
+          - HTTP
