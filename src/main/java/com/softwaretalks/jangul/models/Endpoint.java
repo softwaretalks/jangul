@@ -30,4 +30,12 @@ public class Endpoint {
     public EndpointProtocol getProtocol() {
         return protocol;
     }
+
+    public static Endpoint httpFrom(String address) {
+        return new Endpoint(address, EndpointProtocol.HTTP);
+    }
+
+    public UUID getId() {
+        return id;
+    }
 }
