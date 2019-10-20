@@ -9,6 +9,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class EndpointsControllerTest {
     private TestRestTemplate restTemplate;
 
     @Test
+    @WithMockUser(value = "user")
     public void postEndpoints_shouldReturnSavedEndpoint() {
         String address = "https://softwaretalks.ir";
         final Endpoint endpoint = new Endpoint(address, EndpointProtocol.HTTP);
