@@ -4,7 +4,7 @@ import com.softwaretalks.jangul.models.Log;
 import com.softwaretalks.jangul.repositories.LogRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Optional;
 
 @Component
 public class LogProcessStep implements ProcessStep {
@@ -18,12 +18,12 @@ public class LogProcessStep implements ProcessStep {
     @Override
     public void process(HealthcheckResult result) {
         final var endpoint = result.getEndpoint();
-        final List<Log> endpointLogs = logRepository.findByEndpointIdOrderByStartTimeDesc(endpoint.getId());
-        if (endpointLogs.isEmpty()) {
+        final Optional<Log> maybeEndpointLog = logRepository.findTopByEndpointIdOrderByStartTimeDesc(endpoint.getId());
+        if (maybeEndpointLog.isEmpty()) {
             logRepository.save(new Log(endpoint.getId(), result.isUp()));
             return;
         }
-        final Log log = endpointLogs.get(0);
+        final Log log = maybeEndpointLog.get();
         if (log.isUp() == result.isUp()) {
             return;
         }
