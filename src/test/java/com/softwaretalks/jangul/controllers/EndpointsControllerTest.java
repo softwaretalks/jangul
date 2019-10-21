@@ -1,7 +1,7 @@
 package com.softwaretalks.jangul.controllers;
 
 import com.softwaretalks.jangul.models.Endpoint;
-import com.softwaretalks.jangul.models.EndpointProtocol;
+import com.softwaretalks.jangul.models.enums.EndpointProtocol;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

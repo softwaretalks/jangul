@@ -1,5 +1,7 @@
 package com.softwaretalks.jangul.models;
 
+import com.softwaretalks.jangul.models.enums.EndpointProtocol;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.UUID;

@@ -1,10 +1,14 @@
-package com.softwaretalks.jangul.services;
+package com.softwaretalks.jangul.services.impl;
 
 import com.softwaretalks.jangul.models.Endpoint;
 import com.softwaretalks.jangul.models.EndpointCheckResult;
-import com.softwaretalks.jangul.models.EndpointProtocol;
+import com.softwaretalks.jangul.models.enums.EndpointProtocol;
 import com.softwaretalks.jangul.repositories.EndpointCheckResultRepository;
 import com.softwaretalks.jangul.repositories.EndpointRepository;
+import com.softwaretalks.jangul.services.HealthCheckResultProcessor;
+import com.softwaretalks.jangul.services.HealthChecker;
+import com.softwaretalks.jangul.services.JangulService;
+import com.softwaretalks.jangul.exceptions.UnsuccessfulCheckException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -39,7 +43,6 @@ public class DefaultJangulService implements JangulService {
     @Override
     @Scheduled(fixedDelay = 1 * 1000)
     public void runHealthchecks() {
-        log.info("runHealthchecks");
         endpointRepository.findAll().stream()
                 .forEach(this::processEndpoint);
     }
@@ -56,6 +59,8 @@ public class DefaultJangulService implements JangulService {
             final EndpointCheckResult endpointCheckResult = new EndpointCheckResult(endpoint, healthcheckResult);
             endpointCheckResultRepository.save(endpointCheckResult);
             processor.process(healthcheckResult);
+            log.info("helthcheckresult:{}", healthcheckResult);
+
         } catch (UnsuccessfulCheckException e) {
             log.warn(String.format("Error in healthchecking endpoint {}", endpoint.getAddress()), e);
         }

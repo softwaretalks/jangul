@@ -1,7 +1,10 @@
-package com.softwaretalks.jangul.services;
+package com.softwaretalks.jangul.services.steps;
+
 
 import com.softwaretalks.jangul.models.Log;
 import com.softwaretalks.jangul.repositories.LogRepository;
+import com.softwaretalks.jangul.services.ProcessStep;
+import com.softwaretalks.jangul.services.impl.HealthcheckResult;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

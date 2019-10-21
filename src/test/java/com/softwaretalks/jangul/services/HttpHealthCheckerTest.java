@@ -1,6 +1,8 @@
 package com.softwaretalks.jangul.services;
 
+import com.softwaretalks.jangul.exceptions.UnsuccessfulCheckException;
 import com.softwaretalks.jangul.models.Endpoint;
+import com.softwaretalks.jangul.services.impl.HttpHealthChecker;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

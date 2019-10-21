@@ -1,4 +1,4 @@
-package com.softwaretalks.jangul.models;
+package com.softwaretalks.jangul.models.enums;
 
 public enum EndpointProtocol {
     HTTP,

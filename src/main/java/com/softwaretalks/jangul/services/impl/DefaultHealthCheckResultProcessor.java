@@ -1,5 +1,7 @@
-package com.softwaretalks.jangul.services;
+package com.softwaretalks.jangul.services.impl;
 
+import com.softwaretalks.jangul.services.HealthCheckResultProcessor;
+import com.softwaretalks.jangul.services.ProcessStep;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
