@@ -80,6 +80,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         try {
             final PrintWriter writer = response.getWriter();
+            response.addHeader("content-type", "application/json");
             objectMapper.writeValue(writer, Map.of("token", token));
         } catch (IOException e) {
             throw new RuntimeException("Error in sending the token", e);

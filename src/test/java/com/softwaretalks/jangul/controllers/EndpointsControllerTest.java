@@ -9,9 +9,9 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,8 +22,15 @@ public class EndpointsControllerTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    @WithMockUser(value = "user")
     public void postEndpoints_shouldReturnSavedEndpoint() {
+
+        final String token = generateToken();
+
+        restTemplate.getRestTemplate().getInterceptors().add((request, body, execution) -> {
+            request.getHeaders().add("Authorization", "Bearer " + token);
+            return execution.execute(request, body);
+        });
+
         String address = "https://softwaretalks.ir";
         final Endpoint endpoint = new Endpoint(address, EndpointProtocol.HTTP);
         final Endpoint response = restTemplate.postForObject("/endpoints", endpoint, Endpoint.class);
@@ -40,5 +47,13 @@ public class EndpointsControllerTest {
         final var savedEndpoints = endpointsEntity.getBody();
         assertThat(savedEndpoints.size()).isEqualTo(1);
         assertThat(savedEndpoints.get(0).getAddress()).isEqualTo(address);
+    }
+
+    private String generateToken() {
+        final String username = "email@gmail.com";
+        final String password = "password";
+        restTemplate.postForObject("/users", Map.of("email", username, "password", password), Object.class);
+        final Map<String, String> tokenMap = restTemplate.postForObject("/tokens", Map.of("username", username, "password", password), Map.class);
+        return tokenMap.get("token");
     }
 }
