@@ -1,4 +1,4 @@
-package com.softwaretalks.jangul.controllers;
+package com.softwaretalks.jangul.web.controllers;
 
 import com.softwaretalks.jangul.models.Log;
 import com.softwaretalks.jangul.repositories.LogRepository;

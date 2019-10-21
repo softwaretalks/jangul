@@ -1,4 +1,4 @@
-package com.softwaretalks.jangul.controllers;
+package com.softwaretalks.jangul.web.controllers;
 
 import com.softwaretalks.jangul.models.Endpoint;
 import com.softwaretalks.jangul.repositories.EndpointRepository;
