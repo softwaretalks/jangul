@@ -12,9 +12,24 @@ schemes:
   - "https"
 
 paths:
+  /users:
+    post:
+      summary: "Registers a new user"
+      parameters:
+        - in: "body"
+          name: "user"
+          required: true
+          schema:
+            $ref: "#/definitions/UserRequest"
+      responses:
+        200:
+          description: "User registered successfully"
+          schema:
+            $ref: "#/definitions/UserResponse"
+          
   /endpoints:
     post:
-      summary: "Add a new endpoint to check its health in known intervals"
+      summary: "Adds a new endpoint to check its health in known intervals"
       description: ""
       operationId: "addEndpoint"
       consumes:
@@ -50,6 +65,10 @@ paths:
 
 
 definitions:
+  UserRequest:
+    type: object
+  UserResponse:
+    type: object
   Endpoint:
     type: "object"
     properties:
