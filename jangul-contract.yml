@@ -80,16 +80,34 @@ paths:
               $ref: "#/definitions/Endpoint"
 
 
+
 definitions:
   UserRequest:
     type: object
+    properties:
+      email:
+        type: string
+        format: email
+      password:
+        type: string
   UserResponse:
     type: object
+    properties:
+      email:
+        type: string
     
   TokenRequest:
     type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
   TokenResponse:
     type: object
+    properties:
+      token:
+        type: string
   Endpoint:
     type: "object"
     properties:
