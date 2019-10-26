@@ -23,9 +23,26 @@ paths:
             $ref: "#/definitions/UserRequest"
       responses:
         200:
-          description: "User registered successfully"
+          description: User registered successfully
           schema:
             $ref: "#/definitions/UserResponse"
+  /tokens:
+    post:
+      summary: |
+       Requests a new auth token, The auth token should be sent through Authorization header with the following format:
+         Authorization: Bearer GENERATED_TOKEN
+      parameters:
+        - in: "body" 
+          name: "request"
+          required: true
+          schema:
+            $ref: "#/definitions/TokenRequest"
+      responses:
+        200:
+          description: Token has been generated
+          schema:
+            $ref: "#/definitions/TokenResponse"
+    
           
   /endpoints:
     post:
@@ -63,11 +80,15 @@ paths:
               $ref: "#/definitions/Endpoint"
 
 
-
 definitions:
   UserRequest:
     type: object
   UserResponse:
+    type: object
+    
+  TokenRequest:
+    type: object
+  TokenResponse:
     type: object
   Endpoint:
     type: "object"
