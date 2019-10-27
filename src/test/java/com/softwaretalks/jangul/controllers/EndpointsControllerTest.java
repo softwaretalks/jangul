@@ -2,11 +2,14 @@ package com.softwaretalks.jangul.controllers;
 
 import com.softwaretalks.jangul.models.Endpoint;
 import com.softwaretalks.jangul.models.EndpointProtocol;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
@@ -47,6 +50,40 @@ public class EndpointsControllerTest {
         final var savedEndpoints = endpointsEntity.getBody();
         assertThat(savedEndpoints.size()).isEqualTo(1);
         assertThat(savedEndpoints.get(0).getAddress()).isEqualTo(address);
+    }
+
+    @Test
+    public void postEndpoints_shouldReturnHttp400StatusCodeForInvalidAddress() {
+
+        final String token = generateToken();
+
+        String address = "https://a_dummy_invalid_address";
+        final Endpoint endpoint = new Endpoint(address, EndpointProtocol.HTTP);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        HttpEntity<Endpoint> requestEntity = new HttpEntity<>(endpoint, headers);
+
+        ResponseEntity<Endpoint> endpointResponseEntity = restTemplate.exchange("/endpoints", HttpMethod.POST, requestEntity, Endpoint.class);
+
+        Assertions.assertEquals(400, endpointResponseEntity.getStatusCodeValue());
+
+    }
+
+    @Test
+    public void postEndpoints_shouldReturnHttp400StatusCodeForInvalidProtocol() {
+
+        final String token = generateToken();
+
+        String address = "https://google.com";
+        final Endpoint endpoint = new Endpoint(address, null);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        HttpEntity<Endpoint> requestEntity = new HttpEntity<>(endpoint, headers);
+
+        ResponseEntity<Endpoint> endpointResponseEntity = restTemplate.exchange("/endpoints", HttpMethod.POST, requestEntity, Endpoint.class);
+
+        Assertions.assertEquals(400, endpointResponseEntity.getStatusCodeValue());
+
     }
 
     private String generateToken() {

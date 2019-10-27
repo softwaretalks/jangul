@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class EndpointController {
     }
 
     @PostMapping(path = "/endpoints")
-    public Endpoint postEndpoint(@RequestBody Endpoint endpoint) {
+    public Endpoint postEndpoint(@Valid @RequestBody Endpoint endpoint) {
         var savedEndpoint = this.endpointRepository.save(endpoint);
         return savedEndpoint;
     }
