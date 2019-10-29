@@ -11,11 +11,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: jwalton/gh-find-current-pr@v1
-      id: findPr
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-    - run: echo "Your PR is ${PR}"
     - name: Set up JDK
       uses: actions/setup-java@v1
       with:
