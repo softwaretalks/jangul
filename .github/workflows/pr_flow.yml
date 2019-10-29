@@ -1,4 +1,4 @@
-name: Java CI
+name: Verify PRs
 
 on: 
   pull_request:
