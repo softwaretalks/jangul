@@ -11,7 +11,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Set up JDK 1.8
+    - uses: jwalton/gh-find-current-pr@v1
+      id: findPr
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - run: echo "Your PR is ${PR}"
+    - name: Set up JDK
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
@@ -24,6 +29,7 @@ jobs:
            -Dsonar.projectKey=softwaretalks_jangul \
            -Dsonar.organization=softwaretalks \
            -Dsonar.host.url=https://sonarcloud.io \
-           -Dsonar.pullrequest.key=1
+           -Dsonar.pullrequest.key=$PR
+           -Dsonar.pullrequest.branch=master
            -Dsonar.login=$SONAR_LOGIN
 
