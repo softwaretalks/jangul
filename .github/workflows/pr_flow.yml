@@ -23,6 +23,7 @@ jobs:
     - name: Build with Maven
       env:
         SONAR_LOGIN: ${{ secrets.sonar_login }}
+        PR: ${{ github.event.number }}
       run: |
            printenv
            mvn verify sonar:sonar \
