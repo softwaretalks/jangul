@@ -1,0 +1,29 @@
+name: Java CI
+
+on: 
+  pull_request:
+    branches: 
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    - name: Build with Maven
+      env:
+        SONAR_LOGIN: ${{ secrets.sonar_login }}
+      run: |
+           printenv
+           mvn verify sonar:sonar \
+           -Dsonar.projectKey=softwaretalks_jangul \
+           -Dsonar.organization=softwaretalks \
+           -Dsonar.host.url=https://sonarcloud.io \
+           -Dsonar.pullrequest.key=1
+           -Dsonar.login=$SONAR_LOGIN
+
