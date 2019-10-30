@@ -48,6 +48,7 @@ public class DefaultJangulService implements JangulService {
         final var checker = this.healthCheckers.get(endpoint.getProtocol());
         if (checker == null) {
             log.warn("Endpoint protocol {} is not supported! ", endpoint.getProtocol());
+            return;
         }
 
         final HealthcheckResult healthcheckResult;
