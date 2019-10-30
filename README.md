@@ -1,5 +1,4 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=softwaretalks_jangul&metric=alert_status)](https://sonarcloud.io/dashboard?id=softwaretalks_jangul)
-
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=softwaretalks_jangul&metric=coverage)](https://sonarcloud.io/dashboard?id=softwaretalks_jangul)
 
 
