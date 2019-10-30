@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.softwaretalks.jangul</groupId>
-    <artifactId>jangule-service</artifactId>
+    <artifactId>jangul-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>jangule-service</name>
+    <name>jangul-service</name>
     <description>Jangul Service</description>
 
     <properties>
