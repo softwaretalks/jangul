@@ -57,7 +57,7 @@ public class DefaultJangulService implements JangulService {
             endpointCheckResultRepository.save(endpointCheckResult);
             processor.process(healthcheckResult);
         } catch (UnsuccessfulCheckException e) {
-            log.warn(String.format("Error in healthchecking endpoint {}", endpoint.getAddress()), e);
+            log.warn(String.format("Error in health checking endpoint %s", endpoint.getAddress()), e);
         }
     }
 }
