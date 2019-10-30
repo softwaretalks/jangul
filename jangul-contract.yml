@@ -12,9 +12,41 @@ schemes:
   - "https"
 
 paths:
+  /users:
+    post:
+      summary: "Registers a new user"
+      parameters:
+        - in: "body"
+          name: "user"
+          required: true
+          schema:
+            $ref: "#/definitions/UserRequest"
+      responses:
+        200:
+          description: User registered successfully
+          schema:
+            $ref: "#/definitions/UserResponse"
+  /tokens:
+    post:
+      summary: |
+       Requests a new auth token, The auth token should be sent through Authorization header with the following format:
+         Authorization: Bearer GENERATED_TOKEN
+      parameters:
+        - in: "body" 
+          name: "request"
+          required: true
+          schema:
+            $ref: "#/definitions/TokenRequest"
+      responses:
+        200:
+          description: Token has been generated
+          schema:
+            $ref: "#/definitions/TokenResponse"
+    
+          
   /endpoints:
     post:
-      summary: "Add a new endpoint to check its health in known intervals"
+      summary: "Adds a new endpoint to check its health in known intervals"
       description: ""
       operationId: "addEndpoint"
       consumes:
@@ -50,6 +82,32 @@ paths:
 
 
 definitions:
+  UserRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+      password:
+        type: string
+  UserResponse:
+    type: object
+    properties:
+      email:
+        type: string
+    
+  TokenRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  TokenResponse:
+    type: object
+    properties:
+      token:
+        type: string
   Endpoint:
     type: "object"
     properties:
