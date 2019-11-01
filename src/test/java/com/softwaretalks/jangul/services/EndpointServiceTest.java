@@ -84,4 +84,13 @@ public class EndpointServiceTest {
         assertThat(endpointList.get(0).getAddress()).isEqualTo(bingAddress);
         assertThat(endpointList.get(1).getAddress()).isEqualTo(googleAddress);
     }
+
+    @Test
+    @WithMockUser(username = "testi@gmail.com")
+    public void getEndpoints_whenInvalidUserThenThrowNotFoundUserException() {
+
+        //// TODO: 11/1/2019 change to check Exception
+        List<Endpoint> endpointList = endpointService.getEndpoints();
+        assertThat(endpointList.size()).isEqualTo(0);
+    }
 }

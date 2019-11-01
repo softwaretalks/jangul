@@ -2,12 +2,12 @@ package com.softwaretalks.jangul.security;
 
 import com.softwaretalks.jangul.models.User;
 import com.softwaretalks.jangul.repositories.UserRepository;
+import com.softwaretalks.jangul.services.NotFoundUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -16,9 +16,11 @@ public class JwtUtil {
     @Autowired
     private UserRepository userRepository;
 
-    public User getCurrentUser() {
+    public User getCurrentUser() throws NotFoundUserException {
 
         Optional<User> user = userRepository.findByEmail(getEmailCurrentUser());
+        if (user.isEmpty())
+            throw new NotFoundUserException();
         return user.get();
     }
 
@@ -28,9 +30,9 @@ public class JwtUtil {
         String username;
         if (principal instanceof User) {
             username = ((User) principal).getEmail();
-        } else if (principal instanceof UserDetails){
+        } else if (principal instanceof UserDetails) {
             username = ((UserDetails) principal).getUsername();
-        }else
+        } else
             username = principal.toString();
 
         return username;
