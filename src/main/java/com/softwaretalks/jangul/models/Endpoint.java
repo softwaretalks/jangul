@@ -10,17 +10,20 @@ public class Endpoint {
     private UUID id;
     private final String address;
     private final EndpointProtocol protocol;
+    private UUID userId;
 
     private Endpoint() {
         this.id = UUID.randomUUID();
         address = null;
         protocol = null;
+        userId = null;
     }
 
-    public Endpoint(String address, EndpointProtocol protocol) {
+    public Endpoint(String address, EndpointProtocol protocol,UUID userId) {
         this.id = UUID.randomUUID();
         this.address = address;
         this.protocol = protocol;
+        this.userId = userId;
     }
 
     public String getAddress() {
@@ -31,11 +34,17 @@ public class Endpoint {
         return protocol;
     }
 
-    public static Endpoint httpFrom(String address) {
-        return new Endpoint(address, EndpointProtocol.HTTP);
+    public static Endpoint httpFrom(String address,UUID userId) {
+        return new Endpoint(address, EndpointProtocol.HTTP,userId);
     }
 
     public UUID getId() {
         return id;
     }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
 }
+
+

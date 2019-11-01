@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +33,8 @@ public class EndpointsControllerTest {
         });
 
         String address = "https://softwaretalks.ir";
-        final Endpoint endpoint = new Endpoint(address, EndpointProtocol.HTTP);
+        UUID userId = UUID.randomUUID();
+        final Endpoint endpoint = new Endpoint(address, EndpointProtocol.HTTP, userId);
         final Endpoint response = restTemplate.postForObject("/endpoints", endpoint, Endpoint.class);
         assertThat(response.getAddress())
                 .isEqualTo(address);

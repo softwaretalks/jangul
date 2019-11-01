@@ -1,7 +1,8 @@
 package com.softwaretalks.jangul.controllers;
 
 import com.softwaretalks.jangul.models.Endpoint;
-import com.softwaretalks.jangul.repositories.EndpointRepository;
+import com.softwaretalks.jangul.services.EndpointService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,20 +12,17 @@ import java.util.List;
 
 @RestController
 public class EndpointController {
-    private final EndpointRepository endpointRepository;
 
-    public EndpointController(EndpointRepository endpointRepository) {
-        this.endpointRepository = endpointRepository;
-    }
+    @Autowired
+    private EndpointService endpointService;
 
     @PostMapping(path = "/endpoints")
     public Endpoint postEndpoint(@RequestBody Endpoint endpoint) {
-        var savedEndpoint = this.endpointRepository.save(endpoint);
-        return savedEndpoint;
+        return endpointService.createEndpoints(endpoint);
     }
 
     @GetMapping(path = "/endpoints")
     public List<Endpoint> getEndpoints() {
-        return endpointRepository.findAll();
+        return endpointService.getEndpoints();
     }
 }

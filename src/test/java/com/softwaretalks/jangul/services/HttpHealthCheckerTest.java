@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -13,27 +15,29 @@ public class HttpHealthCheckerTest {
     @Autowired
     private HttpHealthChecker healthChecker;
 
+    private final UUID userId = UUID.randomUUID();
+
     @Test
     public void check_shouldReturnDownOn404Responses() throws UnsuccessfulCheckException {
-        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/404"));
+        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/404",userId));
         assertThat(healthcheck.isUp()).isFalse();
     }
 
     @Test
     public void check_shouldReturnDownOn502Responses() throws UnsuccessfulCheckException {
-        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/502"));
+        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/502",userId));
         assertThat(healthcheck.isUp()).isFalse();
     }
 
     @Test
     public void check_shouldReturnUpOnResponse200() throws UnsuccessfulCheckException {
-        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/200"));
+        final var healthcheck = healthChecker.healthcheck(Endpoint.httpFrom("https://httpstat.us/200",userId));
         assertThat(healthcheck.isUp()).isTrue();
     }
 
     @Test
     public void check_shouldThrowExceptionOnInvalidEndpoints() {
         assertThrows(UnsuccessfulCheckException.class, () ->
-                healthChecker.healthcheck(Endpoint.httpFrom("https://this-site-cant-exist.blabla")));
+                healthChecker.healthcheck(Endpoint.httpFrom("https://this-site-cant-exist.blabla",userId)));
     }
 }
