@@ -1,6 +1,7 @@
 package com.softwaretalks.jangul.models;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Entity
+@ToString(exclude = "password")
 public class User {
     @Id
     private UUID id;

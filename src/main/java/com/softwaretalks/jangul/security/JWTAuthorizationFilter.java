@@ -1,5 +1,6 @@
 package com.softwaretalks.jangul.security;
 
+import com.softwaretalks.jangul.repositories.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -23,8 +24,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
+    private final UserRepository userRepository;
+
+    public JWTAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         super(authenticationManager);
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -60,7 +64,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                         .collect(Collectors.toList());
 
                 if (username != null && !username.isEmpty()) {
-                    return new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    return userRepository.findByEmail(username)
+                            .map(user -> new UsernamePasswordAuthenticationToken(user, null, authorities))
+                            .orElseThrow(() -> new RuntimeException("User not found!")); //                TODO: replace with NotFoundException
+
                 }
             } catch (ExpiredJwtException exception) {
                 log.warn("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
@@ -72,6 +79,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                 log.warn("Request to parse JWT with invalid signature : {} failed : {}", token, exception.getMessage());
             } catch (IllegalArgumentException exception) {
                 log.warn("Request to parse empty or null JWT : {} failed : {}", token, exception.getMessage());
+            }
+            catch (RuntimeException exception) {
+//                TODO: replace with NotFoundException
+                log.warn("User not found");
             }
         }
 

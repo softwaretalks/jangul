@@ -1,6 +1,7 @@
 package com.softwaretalks.jangul.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.softwaretalks.jangul.repositories.UserRepository;
 import com.softwaretalks.jangul.security.JWTAuthenticationFilter;
 import com.softwaretalks.jangul.security.JWTAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,19 +30,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .csrf().disable()
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/users").permitAll()
                 .and()
-                .authorizeRequests().antMatchers( "/h2-console/**").permitAll()
+                .authorizeRequests().antMatchers("/h2-console/**").permitAll()
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.POST).authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), objectMapper))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), userRepository))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
