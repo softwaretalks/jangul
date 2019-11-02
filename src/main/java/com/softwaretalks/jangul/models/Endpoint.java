@@ -1,10 +1,13 @@
 package com.softwaretalks.jangul.models;
 
+import com.softwaretalks.jangul.validation.ValidEndpoint;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.UUID;
 
 @Entity
+@ValidEndpoint
 public class Endpoint {
     @Id
     private UUID id;
