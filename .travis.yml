@@ -8,7 +8,7 @@ addons:
   sonarcloud:
     organization: "softwaretalks-1" 
     token:
-      secure: ${sonar_login} # encrypted value of your token
+      secure: "Kl2YJJJJpj2WKMZKFqaw6EmaM/ZKEvev0h8V0cEdsHbkGlu0wMvKzf8FGLlrwDVFXirnwCA7PTs5V5knn0PGKFeafaottH51Zdx9BxRNG6bdbpyy+Yg9Rxt96bz3dx8L0D7zsK3o4Z/T/P/LTuklTX/RVLMiRcNuIKIFMN+5LO+1GzuLSlhLfJ/kVKrxnreXmL/H4LVCha+J8t+1croAledh4dRm4wWNGvFeTpiWWC1T9u8EA7hQbrBXwHlkG9cTXNfAhlbYwjSvCfexcCgFYMYOjv8X1Hm4aml+K2Wr0qChx39rZ6rUM5M83Hoe2zfR6EgDBvAB3PyJkxayddEl5o9iiadGX57yJUAotTmGvrW9Rdof7Ic5LIAnZPS6J6I5pD5EYKTrJpFmOr9P8wMHSEuiMXVNn9W89z25U/0WVxtYO7ii1zSIXzPH/H7HMjZ4XBm3WNCxvJ0BT7/GKuv1xiRD12NRGSXSnep/t9lCWwXFoF5l6uLhVvxBhrUkhgML8e8QuQ9HEkj4Ln6Kjqs9ETM8MC+y2x7bHES8RZHQPU8Ffnqdh58rd2mkhma8bmgz1TGo+MnLHClw3n75YVMiui9CKI41oEcLVEy0K+AvZg8HnmXgoQnRavofN66Xd5hfcwOk6If5Vk12BLxoa2WRf7YwBKAv0wMKayniUh4TBXQ=" # encrypted value of your token
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - mvn clean verify sonar:sonar -Dsonar.projectKey=softwaretalks_jangul
