@@ -1,0 +1,23 @@
+name: Master Flow
+
+on: 
+  pull_request:
+    branches: 
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    - name: Build with Maven
+      env:
+        SONAR_LOGIN: ${{ secrets.sonar_login }}
+        PR: ${{ github.event.number }}
+      run: |
+        mvn test
