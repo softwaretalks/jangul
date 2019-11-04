@@ -20,6 +20,8 @@ jobs:
       env:
         SONAR_LOGIN: ${{ secrets.sonar_login }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
          mvn verify sonar:sonar \
            -Dsonar.projectKey=softwaretalks_jangul \
@@ -32,5 +34,5 @@ jobs:
         version=$(date '+%Y%m%d%H%M%S')
         echo "the docker image version would be $version"
         docker build -t softwaretalks/jangul:$version .
-        docker login -u $docker_username -p $docker_password
+        docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
         docker push softwaretalks/jangul:$version
