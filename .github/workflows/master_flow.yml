@@ -1,9 +1,10 @@
 name: Master Flow
 
 on: 
-  pull_request:
+  push:
     branches: 
       - master
+
 
 jobs:
   build:
@@ -20,4 +21,8 @@ jobs:
         SONAR_LOGIN: ${{ secrets.sonar_login }}
         PR: ${{ github.event.number }}
       run: |
-        mvn test
+        mvn clean package
+    - name: Dockerize
+      run: |
+        printenv
+        # docker build -t fandoghpaas:
