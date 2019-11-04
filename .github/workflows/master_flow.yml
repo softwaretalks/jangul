@@ -31,4 +31,6 @@ jobs:
       run: |
         version=$(date '+%Y%m%d%H%M%S')
         echo "the docker image version would be $version"
-        # docker build -t fandoghpaas:
+        docker build -t softwaretalks/jangul:$version .
+        docker login -u $docker_username -p $docker_password
+        docker push softwaretalks/jangul:$version
