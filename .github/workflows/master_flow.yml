@@ -19,7 +19,7 @@ jobs:
     - name: Build with Maven
       env:
         SONAR_LOGIN: ${{ secrets.sonar_login }}
-        PR: ${{ github.event.number }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
          mvn verify sonar:sonar \
            -Dsonar.projectKey=softwaretalks_jangul \
@@ -29,5 +29,6 @@ jobs:
          mvn package
     - name: Dockerize
       run: |
-        printenv
+        version=$(date '+%Y%m%d%H%M%S')
+        echo "the docker image version would be $version"
         # docker build -t fandoghpaas:
