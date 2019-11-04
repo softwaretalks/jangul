@@ -21,7 +21,12 @@ jobs:
         SONAR_LOGIN: ${{ secrets.sonar_login }}
         PR: ${{ github.event.number }}
       run: |
-        mvn clean package
+         mvn verify sonar:sonar \
+           -Dsonar.projectKey=softwaretalks_jangul \
+           -Dsonar.organization=softwaretalks-1 \
+           -Dsonar.host.url=https://sonarcloud.io \
+           -Dsonar.login=$SONAR_LOGIN
+         mvn package
     - name: Dockerize
       run: |
         printenv
