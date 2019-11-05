@@ -1,0 +1,39 @@
+name: Master Flow
+
+on: 
+  push:
+    branches: 
+      - master
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.11
+    - name: Build with Maven
+      env:
+        SONAR_LOGIN: ${{ secrets.sonar_login }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+         mvn verify sonar:sonar \
+           -Dsonar.projectKey=softwaretalks_jangul \
+           -Dsonar.organization=softwaretalks-1 \
+           -Dsonar.host.url=https://sonarcloud.io \
+           -Dsonar.login=$SONAR_LOGIN
+         mvn package -DskipTests=true
+    - name: Dockerize
+      env:
+        DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        version=$(date '+%Y%m%d%H%M%S')
+        echo "the docker image version would be $version"
+        docker build -t softwaretalks/jangul:$version .
+        docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+        docker push softwaretalks/jangul:$version
