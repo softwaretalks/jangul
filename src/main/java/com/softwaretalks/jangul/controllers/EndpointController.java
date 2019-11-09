@@ -23,7 +23,8 @@ public class EndpointController {
     }
 
     @PostMapping(path = "/endpoints")
-    public Endpoint postEndpoint(@RequestBody Endpoint endpoint, HttpServletRequest request) {
+    public Endpoint postEndpoint(@AuthenticationPrincipal User user,@RequestBody Endpoint endpoint, HttpServletRequest request) {
+    	endpoint.setOwner(user);
         var savedEndpoint = this.endpointRepository.save(endpoint);
         return savedEndpoint;
     }
@@ -31,6 +32,6 @@ public class EndpointController {
     @GetMapping(path = "/endpoints")
     public List<Endpoint> getEndpoints(@AuthenticationPrincipal User user) {
         log.info("Logged in user is {}", user);
-        return endpointRepository.findAll();
+        return endpointRepository.findByOwner(user);
     }
 }

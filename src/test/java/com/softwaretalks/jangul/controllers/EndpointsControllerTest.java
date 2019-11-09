@@ -2,6 +2,7 @@ package com.softwaretalks.jangul.controllers;
 
 import com.softwaretalks.jangul.models.Endpoint;
 import com.softwaretalks.jangul.models.EndpointProtocol;
+import com.softwaretalks.jangul.models.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,9 @@ public class EndpointsControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+	private final String username = "email@gmail.com";
+	private final String password = "password";
+
     @Test
     public void postEndpoints_shouldReturnSavedEndpoint() {
 
@@ -32,7 +36,10 @@ public class EndpointsControllerTest {
         });
 
         String address = "https://softwaretalks.ir";
-        final Endpoint endpoint = new Endpoint(address, EndpointProtocol.HTTP);
+
+		User user = new User(username,password);
+
+        final Endpoint endpoint = new Endpoint(address, EndpointProtocol.HTTP,user);
         final Endpoint response = restTemplate.postForObject("/endpoints", endpoint, Endpoint.class);
         assertThat(response.getAddress())
                 .isEqualTo(address);
@@ -50,8 +57,6 @@ public class EndpointsControllerTest {
     }
 
     private String generateToken() {
-        final String username = "email@gmail.com";
-        final String password = "password";
         restTemplate.postForObject("/users", Map.of("email", username, "password", password), Object.class);
         final Map<String, String> tokenMap = restTemplate.postForObject("/tokens", Map.of("username", username, "password", password), Map.class);
         return tokenMap.get("token");
