@@ -38,9 +38,13 @@ jobs:
         docker build -t softwaretalks/jangul:$version .
         docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
         docker push softwaretalks/jangul:$version
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+        architecture: 'x64'
     - name: Deploy
       run: |
         echo $version
-        pip install fandogh_cli --upgrade
+        pip install fandogh-cli --upgrade
         fandogh --help
 
