@@ -33,7 +33,14 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         version=$(date '+%Y%m%d%H%M%S')
+        echo "::set-env name=version::$version"
         echo "the docker image version would be $version"
         docker build -t softwaretalks/jangul:$version .
         docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
         docker push softwaretalks/jangul:$version
+    - name: Deploy
+      run:
+        echo $version
+        pip install fandogh_cli --upgrade
+        fandogh --help
+
