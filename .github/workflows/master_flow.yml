@@ -39,7 +39,7 @@ jobs:
         docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
         docker push softwaretalks/jangul:$version
     - name: Deploy
-      run:
+      run: |
         echo $version
         pip install fandogh_cli --upgrade
         fandogh --help
