@@ -23,9 +23,9 @@ public class EndpointCheckResult {
     private EndpointCheckResult() {
     }
 
-    public EndpointCheckResult(Endpoint endpoint, HealthcheckResult result) {
+    public EndpointCheckResult(HealthcheckResult result) {
         this.id = UUID.randomUUID();
-        this.endpoint = endpoint;
+        this.endpoint = result.getEndpoint();
         this.up = result.isUp();
         this.date = new Date();
     }
