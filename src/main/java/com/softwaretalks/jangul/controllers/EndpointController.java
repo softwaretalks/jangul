@@ -3,8 +3,10 @@ package com.softwaretalks.jangul.controllers;
 import com.softwaretalks.jangul.models.Endpoint;
 import com.softwaretalks.jangul.models.User;
 import com.softwaretalks.jangul.repositories.EndpointRepository;
+import com.softwaretalks.jangul.validation.ValidationSequence;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +25,7 @@ public class EndpointController {
     }
 
     @PostMapping(path = "/endpoints")
-    public Endpoint postEndpoint(@AuthenticationPrincipal User user,@RequestBody Endpoint endpoint, HttpServletRequest request) {
+    public Endpoint postEndpoint(@AuthenticationPrincipal User user, @Validated(ValidationSequence.class)  @RequestBody Endpoint endpoint, HttpServletRequest request) {
     	endpoint.setOwner(user);
         var savedEndpoint = this.endpointRepository.save(endpoint);
         return savedEndpoint;
