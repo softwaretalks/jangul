@@ -1,15 +1,22 @@
 package com.softwaretalks.jangul.models;
 
+import com.softwaretalks.jangul.validation.EmptyValueGroup;
+import com.softwaretalks.jangul.validation.ValidEndpoint;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
+@ValidEndpoint
 public class Endpoint {
     @Id
     private UUID id;
+    @NotNull(message = "address cannot be null", groups = EmptyValueGroup.class)
     private final String address;
+    @NotNull(message = "protocol cannot be null", groups = EmptyValueGroup.class)
     private final EndpointProtocol protocol;
 
     @ManyToOne
