@@ -1,6 +1,5 @@
 package com.softwaretalks.jangul.controllers;
 
-import com.softwaretalks.jangul.models.Endpoint;
 import com.softwaretalks.jangul.models.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

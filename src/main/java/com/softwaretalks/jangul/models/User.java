@@ -18,6 +18,7 @@ public class User {
     @Id
     private UUID id;
     @Column(unique = true)
+    @NotNull(message = "email can not be null")
     @Email(message = "email should be a valid email address")
     private String email;
 
